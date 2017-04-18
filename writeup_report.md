@@ -345,7 +345,7 @@ Weights initialization variance was set to 0.1.
 **Optimizer**  
 Adaptive Moment Estimation or Adam optimizer was used to optimize gradient descent process. An optimum learning rate and an optimum added momentum are calculated for each parameter and updated in every batch run. This adaptive optimal step-size is calculated from the ratio between averaged past gradients and square root of squared averaged past gradients, such that the optimum step-size is independent of the magnitude of gradients. I used recommended starting learning rate 0.001 and other default parameters. (beta1=0.9, beta2=0.999, epsilon=1e-08) I have tried epsilon = 1e-04 but it didn't improved learning performance.
 
-Figure below is the plot of accuracy and cross-entropy loss function with respect to progress in training. 
+Figure below is the plot of accuracy and cross-entropy loss function with respect to progress in training.
 
  ![alt text][image90]
 
@@ -383,8 +383,8 @@ http://neuralnetworksanddeeplearning.com/chap3.html#the_cross-entropy_cost_funct
 [image67]: ./traffic-signs-from-web/35.png "TrafficSignsFromWeb18"
 [image68]: ./traffic-signs-from-web/40.png "TrafficSignsFromWeb19"
 
-[image70]: ./Results/ErrorTest_97_4%.png "Results1"
-[image71]: ./Results/ErrorTestImage_97_4%.png "Results2"
+[image70]: ./Results/ErrorTest_97_4.png "Results1"
+[image71]: ./Results/ErrorTestImage_97_4.png "Results2"
 [image73]: ./Results/predict1.png "Results4"
 [image74]: ./Results/predict2.png "Results5"
 [image75]: ./Results/predict3.png "Results6"
