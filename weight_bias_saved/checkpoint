@@ -1,0 +1,2 @@
+model_checkpoint_path: "5x5_MP2x2_5x5_3x3_MP2x2_DR_FCx3_E5_B32_DR0.9"
+all_model_checkpoint_paths: "5x5_MP2x2_5x5_3x3_MP2x2_DR_FCx3_E5_B32_DR0.9"

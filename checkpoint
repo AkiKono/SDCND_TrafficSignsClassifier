@@ -1,0 +1,2 @@
+model_checkpoint_path: "RGBY_rescale_AUG_TB"
+all_model_checkpoint_paths: "RGBY_rescale_AUG_TB"
