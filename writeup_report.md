@@ -242,6 +242,17 @@ Figure below is the summary table of the 5 trials, and the final model.
 |# of data in Validation increased||O||O||O|
 |Same # of Data in Each Class|||||O|O||
 
+Trial1  
+![alt text][image8]
+Trial2  
+![alt text][image10]
+Trial3  
+![alt text][image12]
+Trial4  
+![alt text][image14]
+Trial5  
+![alt text][image16]
+
 **ii. EXPERIMENT**
 
 EXPRIMENT ANALYSIS:  
@@ -334,7 +345,7 @@ Weights initialization variance was set to 0.1.
 **Optimizer**  
 Adaptive Moment Estimation or Adam optimizer was used to optimize gradient descent process. An optimum learning rate and an optimum added momentum are calculated for each parameter and updated in every batch run. This adaptive optimal step-size is calculated from the ratio between averaged past gradients and square root of squared averaged past gradients, such that the optimum step-size is independent of the magnitude of gradients. I used recommended starting learning rate 0.001 and other default parameters. (beta1=0.9, beta2=0.999, epsilon=1e-08) I have tried epsilon = 1e-04 but it didn't improved learning performance.
 
-Figure below is the plot of accuracy and cross-entropy loss function with respect to progress in training. Both accuracy and cross_entropy fluctuate. It is probably due to bias shifting. I need to investigate this issue more. I would appreciate any advice on reducing this fluctuation.  
+Figure below is the plot of accuracy and cross-entropy loss function with respect to progress in training. 
 
  ![alt text][image90]
 
