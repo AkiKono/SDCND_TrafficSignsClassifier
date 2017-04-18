@@ -24,7 +24,7 @@ Here is a link to my [project code](https://github.com/udacity/CarND-Traffic-Sig
 [//]: # (Image References)
 
 [image1]: ./examples/RandomOriginalTrainingDataImages.png "Training Data Imanges"
-[image2]: ./examples/BarChartGivenDataDistribution.png "Distribution of Training Data"
+[image2]: ./examples/BarChartGivenDataDistribution_Ratio.png "Distribution of Training Data"
 [image3]: ./examples/LocalNormRGB.png "Local Normalization of RGB"
 [image4]: ./examples/GRAY_RESCALE_RED_RESCALE.png "GRAY_RESCALE_RED_RESCALE"
 [image5]: ./examples/SHADOW_COLOR.png "SHADOW_COLOR"
@@ -101,7 +101,7 @@ Variation of data in dataset:
 
 Dataset contains some images that are too dark for human eyes to recognize the signs. Some images are burred. Some images have shades and/or reflections due to various lightning conditions. Shapes are warped and rotated. The scale of the signs in the images are also different.
 
-The below is a bar chart showing how many image data each class contains.
+The below is a bar chart showing how many image data each class contains, and their ratio.
 
 ![alt text][image2]
 
@@ -176,11 +176,11 @@ image[image[:,:]<-3] = -3
 
 The validation accuracy of the forth trial was 94.4%.
 
-Normalization decreased the validation accuracy by 0.8% which is significant. One possible reason is that some information is lost when setting the values greater than 2 to 2 and setting the values less than -2 to -2. Also, normalization using standard deviation might reduced uniqueness of data distribution for different traffic signs.
+Normalization decreased the validation accuracy by 0.8% which is significant. One possible reason is that some information is lost when setting the values greater than 3 to 3 and setting the values less than -3 to -3. Also, normalization using standard deviation might reduced uniqueness of data distribution for different traffic signs.
 
 **Trial 5:**  
 
-In the trial 5, Histogram Equalization is used instead of normalization. The accuracy dropped to 83%. In histogram equalization, smoothness of the images is lost as you can see in the figure below.
+In the trial 5, Histogram Equalization is used instead of normalization. The accuracy dropped to 83%.
 
 ![alt text][image6]
 Top: original RGB image, Middle: Histogram Equalization on Y image, Bottom: Histogram Equalization on R image
@@ -205,7 +205,9 @@ As a conclusion, the Trial 6 yielded the best result in this experiment. Locally
 Reference
 ["Should I normalize/standardize/rescale"](http://www.faqs.org/faqs/ai-faq/neural-nets/part2/section-16.html)
 
-I have tried with raw, unscaled RGB color channels and a rescaled Y channel data, and it resulted in less accuracy than the Trial 3. The thought behind trying raw RGB color channels is that if RGB datasets are rescaled separately, unique combinations of RGB will be unbalanced so that the color information other than red, green, and blue get lost. It is because other colors are represented as a combination of RGB, e.g. Yellow=[255,255,0]. The possible explanation of rescaled RGB data performing better than raw RGB data could be that the most German traffic signs are strongly associated with red and blue colors. So for this specific traffic sign classifier project, emphasizing RGB color intensity gradient using per-channel rescaling led to better performance. Normalizing color channels however may not give good results in different classifying problems where colors like yellow or purple are key colors to identify objects.
+**Raw RGB or Rescaled RGB**
+
+I have tried with raw, unscaled RGB color channels and a rescaled Y channel data, and it resulted in less accuracy than the Trial 3, which used rescaled RGB and Y channels. The thought behind trying raw RGB color channels is that if RGB datasets are rescaled separately, unique combinations of RGB will be unbalanced so that the color information other than red, green, and blue get lost. It is because other colors are represented as a combination of RGB, e.g. Yellow=[255,255,0]. The possible explanation of rescaled RGB data performing better than raw RGB data could be that the most German traffic signs are strongly associated with red and blue colors. So for this specific traffic sign classifier project, emphasizing RGB color intensity gradient using per-channel rescaling led to better performance. Normalizing color channels however may not give good results in different classifying problems where colors like yellow or purple are key colors to identify objects.
 
 Pierre Sermanet and Yann LeCun also suggested the use of normalized color channels in their paper, ["Traffic Sign Recognition with Multi-Scale Convolutional Networks"](http://yann.lecun.com/exdb/publis/pdf/sermanet-ijcnn-11.pdf).
 
@@ -225,7 +227,7 @@ Five different approaches for splitting and augmenting training and validation d
 
 Conclusion comes first. My final training dataset had 4000 images per 43 different classes summing up to 172000 total training images. My validation set had 750 images per 43 different classes summing up to 32250 total validation images. The ratio between Validation and Training dataset is 1:5. The size of test set is 12630 with different numbers of images in each class.
 
-Figure below is the summary table.
+Figure below is the summary table of the 5 trials, and the final model.
 
 |   |  Trial1|   Trial2|   Trial3|   Trial4|   Trial5|  Final |
 |:-:	|:-:	|:-:	|:-:	|:-:	|:-:	|:-:|
@@ -242,12 +244,15 @@ Figure below is the summary table.
 
 **ii. EXPERIMENT**
 
-Training accuracies were high enough for all trials, so underfitting is not a concern. Rather, overfitting is the problem. Comparing Trial 1 through 4, validation accuracy increased from 92% to 94% when the total number of validation dataset was increased. How I increased validation dataset is as follows: when splitting the data to training and validation datasets, I assigned at least 100 images to each class in validation dataset, or 30% of available data to validation dataset. It is shown in the "Histogram of Total Number of Data" in Figure - and -. So both Trial 2 and Trial 4 had exactly the same number of validation data. The difference between Trial 2 and 4 is the total number of Training dataset by augmentation. Trial 4 had almost twice as much training data as Trial 2 had. However, the difference in validation accuracy was only 0.6%. The ratio of validation and training dataset is not so much correlated to overfitting, but different number of available validation data for different classes is strongly correlated to overfitting. In other words, the model is overfitted to some classes that have many validation data and underfitted to some classes that have small validation data. So in Trial 5, all classes had the same number of validation data and training data. Then, the accuracy of validation dataset increased to 98.9%. The difference in accuracy between validation and training was decreased from 2.2% in Trial 4 to 0.5% in Trial 5. Moreover, Trial 5 used less number of validation and training data but marked higher test accuracy than Trial 4 did.
+EXPRIMENT ANALYSIS:  
+Training accuracies were high enough for all trials, so underfitting is not a concern. Rather, overfitting is the problem. Comparing Trial 1 through 4, validation accuracy increased from 92% to 94% when the total number of validation dataset was increased. Both Trial 2 and Trial 4 had exactly the same number of validation data. The difference between Trial 2 and 4 is the total number of Training dataset by augmentation. Trial 4 had almost twice as much training data as Trial 2 had. However, the difference in validation accuracy was only 0.6%. The ratio of validation and training dataset is not so much correlated to overfitting, but different number of available validation data for different classes is strongly correlated to overfitting. In other words, the model is overfitted to some classes that have many validation data and underfitted to some classes that have small validation data. So in Trial 5, all classes had the same number of validation data and training data. Then, the accuracy of validation dataset increased to 98.9%. The difference in accuracy between validation and training was decreased from 2.2% in Trial 4 to 0.5% in Trial 5. Moreover, Trial 5 used less number of validation and training data but marked higher test accuracy than Trial 4 did.
 
 Still, test accuracy is low compared to validation and training accuracy, so the model is overfitted to training and validation data. This issue is readdressed in the discussion of model architecture.
 
+AUGMENTATION ISSUE:  
 Going back to the summary table, comparing Trail 1 and Trial 3, the difference is the increased number of training data by augmentation; however, neither validation nor test accuracies were improved which indicates augmentation is just adding sampling noise to the model and needs more improvements. This will be the next topic.
 
+AUGMENTATION:  
 The number of training and validation dataset was increased by augmentation in two processes. One is to increase traffic sign images with as small noise as possible. The second augmentation is intentionally adding more noise to original images to encourage generalization.
 
 The code for the first augmentation process can be found in the 8th code cells or in the section "Pre-process the Data Set: First Augmentation by Flipping, Rotation, Shearing, and Translation." Axisymmetric and/or radial symmetric traffic signs were simply flipped and/or rotated. For example, rotary sign is radially symmetric so that it was rotated in 120 and 240 degrees to triple the number of images.
@@ -273,6 +278,8 @@ Here are the random images after augmentation.
 
 ![alt text][image99]
 
+
+CROSS VALIDATION:  
 Cross validation is another technique which often used in the case where only few hundreds data are available. It is highly possible that cross validation can improve the model and accuracy, but it was not applied this time.
 
 
@@ -310,7 +317,10 @@ Figure below is the visualization of the graph from TensorBoard.
 
 The code for training the model is located in the "Train, Validate, and Test the Model" section in the ipython notebook.
 
-Training steps are as follows: deep feedforward neural network calculates probabilities as logits. Softmax is then applied to logits and compared with One-Hot encoding to measure how well the model is classifying dataset. Cross-entropy is used as a cost function to measure the differences between softmax and One-Hot encoding. The derivative of Cross-entropy with respect to weights gives a simple multiplication of the error and the inputs to the neuron which ensures the fast convergence of learning.
+TRAININT STEPS:  
+ * Deep feedforward neural network calculates probabilities as logits.
+ * Softmax is then applied to logits and compared with One-Hot encoding to measure how well the model is classifying dataset.
+ * Cross-entropy is used as a cost function to measure the differences between softmax and One-Hot encoding. The derivative of Cross-entropy with respect to weights gives a simple multiplication of the error and the inputs to the neuron. This ensures the fast convergence of learning.
 
 **Batch size**  
 Mini-batch stochastic gradient descent was used to update weights and biases in back-propagation. Batch size used for the final model results was 32.
@@ -324,7 +334,7 @@ Weights initialization variance was set to 0.1.
 **Optimizer**  
 Adaptive Moment Estimation or Adam optimizer was used to optimize gradient descent process. An optimum learning rate and an optimum added momentum are calculated for each parameter and updated in every batch run. This adaptive optimal step-size is calculated from the ratio between averaged past gradients and square root of squared averaged past gradients, such that the optimum step-size is independent of the magnitude of gradients. I used recommended starting learning rate 0.001 and other default parameters. (beta1=0.9, beta2=0.999, epsilon=1e-08) I have tried epsilon = 1e-04 but it didn't improved learning performance.
 
-Figure below is the plot of accuracy and cross-entropy loss function with respect to progress in training.
+Figure below is the plot of accuracy and cross-entropy loss function with respect to progress in training. Both accuracy and cross_entropy fluctuate. It is probably due to bias shifting. I need to investigate this issue more. I would appreciate any advice on reducing this fluctuation.  
 
  ![alt text][image90]
 
@@ -466,15 +476,43 @@ My final model results were:
 
 Here are German traffic signs that I found on the web:
 
-![alt text][image54] ![alt text][image52] ![alt text][image66]
-![alt text][image55] ![alt text][image62] ![alt text][image65]
-![alt text][image59] ![alt text][image56] ![alt text][image58]
+![alt text][image54] ![alt text][image52]
+![alt text][image55] ![alt text][image66] ![alt text][image56] ![alt text][image62] ![alt text][image65]
+![alt text][image59] ![alt text][image58]
 ![alt text][image57] ![alt text][image60] ![alt text][image68]
 ![alt text][image67] ![alt text][image50] ![alt text][image64]
 ![alt text][image51] ![alt text][image53] ![alt text][image63]
 ![alt text][image61]
 
 First 10 images are from the web. The rest of the images are from the GTSRB dataset which Pierre Sermanet and Yann LeCun presented that their model predicted wrong. I was curios to know how much confidence my model has on the those GTSRB images that are difficult to classify.
+
+Variations in images from the web:
+
+Coarse resolution.
+
+![alt text][image54] ![alt text][image52]
+![alt text][image55]
+
+Severely warped.   
+
+![alt text][image66] ![alt text][image56]
+
+Occulusion due to objects in front.  
+
+![alt text][image62] ![alt text][image65]
+![alt text][image59]
+
+Deformation.  
+
+![alt text][image58]
+
+Severe reflections of lights.  
+
+![alt text][image57]
+
+All these variations can make classification difficult.
+
+
 
 ### PERFORMANCE ON NEW IMAGES:
 **Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. Identify where in your code predictions were made. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).**
@@ -516,19 +554,21 @@ The below is the feature map for "Speed limit 100km/h" after the first convoluti
 
 ![alt text][image78]
 
-Figure below shows the number of prediction errors in each label. The labels on Speed Limit traffic signs are from 0 to 8 for 20km/h limit to 120km/h limit. The errors on those speed limit signs are relatively high for all training, validation, and testing datasets.
+Figure below shows the number of prediction errors in each label. The labels on Speed Limit traffic signs are from 0 to 8 for 20km/h limit to 120km/h limit. The errors on those speed limit signs are relatively high.
 
 ![alt text][image70]
 
-Below are the traffic signs images the model failed to predict.
+Below are the images the model failed to predict.
 
 ![alt text][image71]
+
+Some of the images have severe occulusion, high contrast lighting, blur, warp, and/or too small in scale. Some, however, with no apparent obstackles for classification.
+
+The final accuracy of the model was 97.4%. This is not a satisfactory result for a practical application. The model needs more improvement.
 
 ---
 
 ## 4. Improvement on Deep Convolutional Neural Network
-
-The final accuracy of the model was 97.4%. This is not a satisfactory result for a practical application.
 
 Below is a list of topics I would like to learn more to further improve the model.
 
