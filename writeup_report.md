@@ -71,9 +71,9 @@ The deep convolutional neural network architecture was designed based on LeNet a
 
 ---
 
-### 1. Data Set Summary & Exploration
+## 1. Data Set Summary & Exploration
 
-##### DATA SUMMARY:
+### DATA SUMMARY:
 **Provide a basic summary of the data set and identify where in your code the summary was done. In the code, the analysis should be done using python, numpy and/or pandas methods rather than hardcoding results manually.**
 
 The code for this step is contained in the second code cell of the IPython notebook.  
@@ -87,7 +87,7 @@ signs data set:
 * The shape of a traffic sign image is (32, 32, 3)
 * The number of unique classes/labels in the data set is 43
 
-##### EXPLORATORY VISUALIZATION:
+### EXPLORATORY VISUALIZATION:
 **Include an exploratory visualization of the dataset and identify where the code is in your code file.**
 
 The code for this step is contained in the third and forth code cells of the IPython notebook.  
@@ -101,39 +101,40 @@ Variation of data in dataset:
 
 Dataset contains some images that are too dark for human eyes to recognize the signs. Some images are burred. Some images have shades and/or reflections due to various lightning conditions. Shapes are warped and rotated. The scale of the signs in the images are also different.
 
-The below is a bar chart showing how many image data each class contains. The top graph is for Training dataset, the middle is for Validation dataset, and the bottom is for Testing dataset.
+The below is a bar chart showing how many image data each class contains.
 
 ![alt text][image2]
 
-Traffic sign label 1 and 2 have over 2000 image data whereas most of others have less than 400 image data. Data argumentation scheme is used to ensure even distribution of dataset for training and validation. Details will be explained in the next section.
+Some classes have over 2000 image data whereas most of others have less than 400 image data. Data argumentation scheme is used to ensure even distribution of dataset for training and validation. Details will be explained in the next section.
 
 ---
 
-### 2. Design and Test a Model Architecture
+## 2. Design and Test a Model Architecture
 
-##### PREPROCESSING:
+### PREPROCESSING:
 **Describe how, and identify where in your code, you preprocessed the image data. What techniques were chosen and why did you choose these techniques? Consider including images showing the output of each preprocessing technique. Pre-processing refers to techniques such as converting to grayscale, normalization, etc.**
 
 The code for this step is contained in the fifth code cell of the IPython notebook.
 
-**EXPERIMENT**
+**i. EXPERIMENT**
 
-In this section, 5 different preprocessing schemes are compared with the classification accuracy of the validation dataset for each trial. To test 5 different preprocessed input dataset, the LeNet model architecture from LeNet.Lab is used with fixed hyperparameters for consistency in this experiment.
+In this section, 5 different preprocessing schemes are compared. The LeNet model architecture from LeNet.Lab is used with fixed hyperparameters for consistency in this experiment.
 
 **Trial 1:**
 
-Raw RGB image data values ranging from 0 to 255 were rescaled in the range from 0.1 to 0.9. The rescaling was done globally with the equation,
+Raw RGB image data values ranging from 0 to 255 were rescaled in the range from 0.1 to 0.9. The rescaling was done globally with the equation:  
 0.1 + input*(0.9-0.1)/255 [equ.1]
 
 The validation accuracy of the first trial was 92.9%.
 
 **Trial 2:**
 
-Raw RGB data was rescaled locally in the range 0.1-0.9 using the equation, 0.1 + (input-min(inputs))x(0.9-0.1)/(max(inputs)-min(inputs))) [equ.2]
+Raw RGB data was rescaled locally in the range 0.1-0.9 using the equation:   
+0.1 + (input-min(inputs))x(0.9-0.1)/(max(inputs)-min(inputs))) [equ.2]
 
 The validation accuracy of the second trial was 93.9%.
 
-Local rescaling of the training data can increase validation accuracy of the model by 1% compared to trial 1. Since the total number of validation dataset is 4410, the effect of local rescaling is 441 more successful classification, which is statistically significant. One possible reason is the whitening effect of local rescaling. The figure below compares original raw RGB images and locally rescaled images.
+Local rescaling of the training data can increase validation accuracy of the model by 1% compared to trial 1. Since the total number of validation dataset is 4410, 1% improvement means 441 more successful classification, which is statistically significant. One possible reason is the whitening effect of local rescaling. The figure below compares original raw RGB images and locally rescaled images.
 
 ![alt text][image3]
 Top: raw RGB image, Bottom: RGB image after local rescaling
@@ -156,9 +157,9 @@ To enhance the contrast of each grayscale image, rescaling was done locally with
 
 The validation accuracy of the third trial was 95.2%.
 
-Adding grayscaled image dataset as a 4th channel increased accuracy by 1.3%. The weights in the first convolutional layer were increased as Trial 3 uses 4 channels instead of 3 channels.
+Adding grayscaled image dataset as a 4th channel increased accuracy by 1.3%. It should be noted that depth of the first convolutional layer was increased by 1 due to the added 4th channel, which means there were more parameters in this trial than the previous trials.
 
-The color channel information is still valuable as they tend not be affected by shadows or different lighting conditions. The bottom image in the figure below is the R channel image which color values are least affected by the shadow compared to Y channel image in 3rd row where the intensity of the shadow is rather emphasized.
+The color channel information is valuable as they tend not be affected by shadows or different lighting conditions. The bottom image in the figure below is the R channel image which color values are least affected by the shadow compared to Y channel image in 3rd row where the intensity of the shadow is rather emphasized.
 
 ![alt text][image5]
 
@@ -197,7 +198,7 @@ I have used 4x4 grid size with 2.0 clip limit. It took over 30 minutes to proces
 
 The validation accuracy of the sixth trial was 95.9%.
 
-**CONCLUSION**
+**ii. CONCLUSION**
 
 As a conclusion, the Trial 6 yielded the best result in this experiment. Locally rescaled RGB channels and locally rescaled luminance Y channel after CLAHE are the selected pre-processing method for this project.
 
@@ -209,7 +210,7 @@ I have tried with raw, unscaled RGB color channels and a rescaled Y channel data
 Pierre Sermanet and Yann LeCun also suggested the use of normalized color channels in their paper, ["Traffic Sign Recognition with Multi-Scale Convolutional Networks"](http://yann.lecun.com/exdb/publis/pdf/sermanet-ijcnn-11.pdf).
 
 
-##### PREPROCESSING:
+### PREPROCESSING:
 **Describe how, and identify where in your code, you set up training, validation and testing data. How much data was in each set? Explain what techniques were used to split the data into these sets. (OPTIONAL: As described in the "Stand Out Suggestions" part of the rubric, if you generated additional data for training, describe why you decided to generate additional data, how you generated the data, identify where in your code, and provide example images of the additional data)**
 
 The code for loading original dataset is contained in the first code cell of the IPython notebook. (The code for loading pre-processed dataset is contained in the "Load Pre-Processed Data" section before Model Architecture.)
@@ -220,7 +221,7 @@ All the codes for pre-processing training and validation dataset can be found in
 
 Five different approaches for splitting and augmenting training and validation datasets were tested and compared, while the original testing dataset is kept unchanged and used to test final accuracy of a model in all trials for consistency.
 
-**CONCLUSION**
+**i. CONCLUSION**
 
 Conclusion comes first. My final training dataset had 4000 images per 43 different classes summing up to 172000 total training images. My validation set had 750 images per 43 different classes summing up to 32250 total validation images. The ratio between Validation and Training dataset is 1:5. The size of test set is 12630 with different numbers of images in each class.
 
@@ -239,9 +240,9 @@ Figure below is the summary table.
 |# of data in Validation increased||O||O||O|
 |Same # of Data in Each Class|||||O|O||
 
-**EXPERIMENT**
+**ii. EXPERIMENT**
 
-Training accuracies were high enough for all trials, so the underfitting is not a concern. Rather, overfitting seems to be the problem. Comparing Trial 1 through 4, validation accuracy increased from 92% to 94% when the total number of validation dataset was increased. How I increased validation dataset is as follows: when splitting the data to training and validation datasets, I assigned at least 100 images to each class in validation dataset, or 30% of available data to validation dataset. It is shown in the "Histogram of Total Number of Data" in Figure - and -. So both Trial 2 and Trial 4 had exactly the same number of validation data. The difference between Trial 2 and 4 is the total number of Training dataset by augmentation. Trial 4 had almost twice as much training data as Trial 2 had. However, the difference in validation accuracy was only 0.6%. The ratio of validation and training dataset is not so much correlated to overfitting, but different number of available validation data for different classes is strongly correlated to overfitting. In other words, the model is overfitted to some classes that have many validation data and underfitted to some classes that have small validation data. So in Trial 5, all classes had the same number of validation data and training data. Then, the accuracy of validation dataset increased to 98.9%. The difference in accuracy between validation and training was decreased from 2.2% in Trial 4 to 0.5% in Trial 5. Moreover, Trial 5 used less number of validation and training data but marked higher test accuracy than Trial 4 did.
+Training accuracies were high enough for all trials, so underfitting is not a concern. Rather, overfitting is the problem. Comparing Trial 1 through 4, validation accuracy increased from 92% to 94% when the total number of validation dataset was increased. How I increased validation dataset is as follows: when splitting the data to training and validation datasets, I assigned at least 100 images to each class in validation dataset, or 30% of available data to validation dataset. It is shown in the "Histogram of Total Number of Data" in Figure - and -. So both Trial 2 and Trial 4 had exactly the same number of validation data. The difference between Trial 2 and 4 is the total number of Training dataset by augmentation. Trial 4 had almost twice as much training data as Trial 2 had. However, the difference in validation accuracy was only 0.6%. The ratio of validation and training dataset is not so much correlated to overfitting, but different number of available validation data for different classes is strongly correlated to overfitting. In other words, the model is overfitted to some classes that have many validation data and underfitted to some classes that have small validation data. So in Trial 5, all classes had the same number of validation data and training data. Then, the accuracy of validation dataset increased to 98.9%. The difference in accuracy between validation and training was decreased from 2.2% in Trial 4 to 0.5% in Trial 5. Moreover, Trial 5 used less number of validation and training data but marked higher test accuracy than Trial 4 did.
 
 Still, test accuracy is low compared to validation and training accuracy, so the model is overfitted to training and validation data. This issue is readdressed in the discussion of model architecture.
 
@@ -275,7 +276,7 @@ Here are the random images after augmentation.
 Cross validation is another technique which often used in the case where only few hundreds data are available. It is highly possible that cross validation can improve the model and accuracy, but it was not applied this time.
 
 
-##### MODEL ARCHITECTURE:
+### MODEL ARCHITECTURE:
 **Describe, and identify where in your code, what your final model architecture looks like including model type, layers, layer sizes, connectivity, etc.) Consider including a diagram and/or table describing the final model.**
 
 The code for my final model is located in the "Model Architecture" section of the ipython notebook.
@@ -304,7 +305,7 @@ Figure below is the visualization of the graph from TensorBoard.
 
  ![alt text][image91]
 
-#####  MODEL TRAINING:
+###  MODEL TRAINING:
 **Describe how, and identify where in your code, you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.**
 
 The code for training the model is located in the "Train, Validate, and Test the Model" section in the ipython notebook.
@@ -334,7 +335,7 @@ References:
 ["Improving the way neural networks learn"](
 http://neuralnetworksanddeeplearning.com/chap3.html#the_cross-entropy_cost_function)  
 
-##### SOLUTION APPROACH:
+### SOLUTION APPROACH:
 **Describe the approach taken for finding a solution. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.**
 
 [//]: # (Image References)
@@ -458,9 +459,9 @@ My final model results were:
 
 ---
 
-### 3. Test a Model on New Images
+## 3. Test a Model on New Images
 
-##### ACQUIRING NEW IMAGES:
+### ACQUIRING NEW IMAGES:
 **Choose five German traffic signs found on the web and provide them in the report. For each image, discuss what quality or qualities might be difficult to classify.**
 
 Here are German traffic signs that I found on the web:
@@ -475,14 +476,14 @@ Here are German traffic signs that I found on the web:
 
 First 10 images are from the web. The rest of the images are from the GTSRB dataset which Pierre Sermanet and Yann LeCun presented that their model predicted wrong. I was curios to know how much confidence my model has on the those GTSRB images that are difficult to classify.
 
-##### PERFORMANCE ON NEW IMAGES:
+### PERFORMANCE ON NEW IMAGES:
 **Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. Identify where in your code predictions were made. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).**
 
 The code for making predictions on my final model is located in the second cell of the Ipython notebook in the "Step 3: Test a Model on New Images" section.
 
 The model was able to correctly guess 13 of the 19 traffic signs, which gives an accuracy of 68% which is lower than the accuracy of test dataset. More detailes discussions on this result can be found in the next section.
 
-##### MODEL CERTAINTY - SOFTMAX PROBABILITIES:
+### MODEL CERTAINTY - SOFTMAX PROBABILITIES:
 **Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction and identify where in your code softmax probabilities were outputted. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)**
 
 The code for making predictions on my final model can be found in the section "Output Top 5 Softmax Probabilities For Each Image Found on the Web" in the Step 3.
@@ -525,7 +526,7 @@ Below are the traffic signs images the model failed to predict.
 
 ---
 
-### 4. Improvement on Deep Convolutional Neural Network
+## 4. Improvement on Deep Convolutional Neural Network
 
 The final accuracy of the model was 97.4%. This is not a satisfactory result for a practical application.
 
